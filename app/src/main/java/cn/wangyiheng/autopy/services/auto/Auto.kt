@@ -3,9 +3,12 @@ package cn.wangyiheng.autopy.services.auto
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
+import android.provider.Settings
 import android.util.Log
+import android.view.accessibility.AccessibilityManager
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Toast
+import cn.wangyiheng.autopy.services.MyAccessibilityService
 import cn.wangyiheng.autopy.shared.bus.RxBus
 import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +37,22 @@ class Auto(private val context: Context) {
         context.sendBroadcast(intent)
         return true
     }
+    fun ensureAccessibilityServiceEnabled(accessibilityService: String = MyAccessibilityService::class.java.name) {
+
+        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val enabledServices = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )
+
+        if (enabledServices?.contains(accessibilityService) != true) {
+            // 如果没有启动，引导用户启动无障碍服务
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(intent)
+        }
+    }
+
     fun back(): Boolean {
         val intent = Intent(AutoAction.BACK.action)
         context.sendBroadcast(intent)

@@ -8,9 +8,8 @@ import androidx.navigation.compose.rememberNavController
 @Composable
 fun NavGraph(tokenManager: InfoManager) {
     val navController = rememberNavController()
-    val startDestination = if (tokenManager.getToken().isNullOrEmpty()) "login" else "main"
 
-    NavHost(navController, startDestination = startDestination) {
+    NavHost(navController, "main") {
 
         composable(ScreenRoutes.MAIN) {
             MainScreen(navController)
