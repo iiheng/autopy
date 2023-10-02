@@ -3,41 +3,37 @@ package cn.wangyiheng.autopy
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import cn.wangyiheng.autopy.ui.theme.AutopyTheme
+import cn.wangyiheng.autopy.services.MyForegroundService
+import cn.wangyiheng.autopy.shared.utils.InfoManager
+import cn.wangyiheng.autopy.shared.utils.NavGraph
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+    private val TAG = "MainActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val tokenManager: InfoManager by inject()
+
+        // Start the foreground service when the app launches
+        startForegroundService()
+
+
         setContent {
-            AutopyTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }
-            }
+            NavGraph(tokenManager)
         }
     }
-}
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AutopyTheme {
-        Greeting("Android")
+    private fun startForegroundService() {
+        MyForegroundService.start(this)
     }
+}
+
+@Preview
+@Composable
+fun PreviewMainScreen() {
+    // MainScreen()
 }
