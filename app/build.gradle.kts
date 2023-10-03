@@ -1,12 +1,12 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.chaquo.python")
 }
 
 android {
     namespace = "cn.wangyiheng.autopy"
     compileSdk = 34
-
     defaultConfig {
         applicationId = "cn.wangyiheng.autopy"
         minSdk = 24
@@ -17,6 +17,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        ndk {
+            ndk {
+                abiFilters += mutableSetOf("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            }
+        }
+        withGroovyBuilder {
+            "python" {
+                "pip" {
+                    "install"("matplotlib")
+                }
+            }
         }
     }
 

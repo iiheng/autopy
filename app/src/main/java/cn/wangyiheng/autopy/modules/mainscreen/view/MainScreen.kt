@@ -3,24 +3,94 @@ package cn.wangyiheng.autopy.modules.mainscreen.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import cn.wangyiheng.autopy.modules.mainscreen.controllers.Main_Controller
-import cn.wangyiheng.autopy.ui.theme.AutopyTheme
-import org.koin.core.component.inject
-import org.koin.java.KoinJavaComponent.inject
-import cn.wangyiheng.autopy.services.auto.Auto
-@Composable
-fun MainScreen(navController: NavHostController) {
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.unit.dp
+import com.chaquo.python.PyException
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
+import android.graphics.BitmapFactory
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 
-//    Text(text = "MainScreen")
-    val main_controller = Main_Controller()
-    Button(onClick = { main_controller.start() }) {
-        Text(text = "Start")
+class MainScreen : ComponentActivity() {
+    @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        if (!Python.isStarted()) {
+            Python.start(AndroidPlatform(this))
+        }
+        val py = Python.getInstance()
+        val module = py.getModule("plot")
+
+        setContent {
+            var x by remember { mutableStateOf("") }
+            var y by remember { mutableStateOf("") }
+            var image by remember { mutableStateOf<ImageBitmap?>(null) }
+
+            val context = LocalContext.current
+            val keyboardController = LocalSoftwareKeyboardController.current
+
+            Column(
+                modifier = Modifier.fillMaxSize().padding(16.dp),
+                horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                TextField(
+                    value = x,
+                    onValueChange = { x = it },
+                    label = { Text("X Coordinate") },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
+                    )
+                )
+                Spacer(Modifier.height(16.dp))
+                TextField(
+                    value = y,
+                    onValueChange = { y = it },
+                    label = { Text("Y Coordinate") },
+                    keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
+                    )
+                )
+                Spacer(Modifier.height(16.dp))
+                Button(onClick = {
+                    try {
+                        val bytes = module.callAttr("plot", x, y).toJava(ByteArray::class.java)
+                        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        image = bitmap.asImageBitmap()
+                    } catch (e: PyException) {
+                        // Handle the exception (e.g., show a toast)
+                    }
+                }) {
+                    Text("Plot")
+                }
+                Spacer(Modifier.height(16.dp))
+                image?.let {
+                    androidx.compose.foundation.Image(
+                        bitmap = it,
+                        contentDescription = null,
+                        modifier = Modifier.size(200.dp)
+                    )
+                }
+            }
+        }
     }
-
 }

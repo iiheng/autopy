@@ -12,7 +12,7 @@ fun NavGraph(tokenManager: InfoManager) {
     NavHost(navController, "main") {
 
         composable(ScreenRoutes.MAIN) {
-            MainScreen(navController)
+            MainScreen()
         }
     }
 }
