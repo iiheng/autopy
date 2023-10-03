@@ -28,6 +28,8 @@ android {
                 "pip" {
                     "install"("matplotlib")
                 }
+
+
             }
         }
     }
@@ -80,6 +82,7 @@ dependencies {
 
     implementation("androidx.navigation:navigation-compose:2.7.3")
 
+    //noinspection BomWithoutPlatform
     implementation("org.jetbrains.kotlin:kotlin-bom:1.8.22")
     implementation("io.reactivex.rxjava3:rxjava:3.1.7")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

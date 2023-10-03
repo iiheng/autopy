@@ -10,7 +10,6 @@ fun NavGraph(tokenManager: InfoManager) {
     val navController = rememberNavController()
 
     NavHost(navController, "main") {
-
         composable(ScreenRoutes.MAIN) {
             MainScreen()
         }
