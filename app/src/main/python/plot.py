@@ -1,7 +1,7 @@
 import io
 import matplotlib.pyplot as plt
 
-def plot(x, y):
+def plot2(x, y):
     xa = [float(word) for word in x.split()]
     ya = [float(word) for word in y.split()]
 
