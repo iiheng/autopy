@@ -7,8 +7,7 @@ import org.koin.core.component.inject
 class Main_Controller: ViewModel(), KoinComponent {
     val auto: Auto by inject()
     fun start() {
-        auto.ensureAccessibilityServiceEnabled()
+        auto.ensureAutoEnabled()
     }
-
 
 }

@@ -5,5 +5,7 @@ enum class AutoAction(val action: String) {
     SWIPE("auto.action.SWIPE"),
     GETINFO("auto.action.GETINFO"),
     GETINFOS("auto.action.GETINFOS"),
-    BACK("auto.action.BACK")
+    BACK("auto.action.BACK"),
+    ENTER("auto.action.ENTER");
+
 }

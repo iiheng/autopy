@@ -24,6 +24,7 @@ class MyAccessibilityService : AccessibilityService() {
                 AutoAction.CLICK, AutoAction.SWIPE -> handleGesture(intent)
                 AutoAction.GETINFO, AutoAction.GETINFOS -> handleInfoRetrieval(intent)
                 AutoAction.BACK -> handleBack()
+                AutoAction.ENTER -> TODO()
             }
         } catch (e: Exception) {
             // TODO: Handle or log the exception accordingly
