@@ -1,6 +1,6 @@
-from chaquopy_java import java
+from cn.wangyiheng.autopy.services.auto import Auto
 
 def click():
-    # kotlin_instance = java.Class('cn.wangyiheng.autopy.services.auto.Auto')()
-    # result = kotlin_instance.ensureAutoEnabled()
-    return True
+    kotlin_instance = Auto()
+    result = kotlin_instance.ensureAutoEnabled()
+    return result

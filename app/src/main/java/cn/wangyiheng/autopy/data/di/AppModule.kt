@@ -9,6 +9,6 @@ val appModule = module {
 //    single { androidContext() }
     single { InfoManager(androidContext()) }
 
-    single{ Auto(androidContext()) }
+    single{ Auto() }
 
 }

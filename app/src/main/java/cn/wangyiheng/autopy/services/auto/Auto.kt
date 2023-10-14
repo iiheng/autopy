@@ -17,12 +17,16 @@ import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.random.Random
 
 var getinfocount = 0
 var getinfoscount = 0
-class Auto(private val context: Context) {
+class Auto(): KoinComponent {
 
+    val context: Context by inject()
     fun click(x: Int, y: Int,duration:Int = 300): Boolean {
         val intent = Intent(AutoAction.CLICK.action).apply {
             putExtra("x", x)
@@ -83,9 +87,9 @@ class Auto(private val context: Context) {
         return AccessibilityManager.currentPackageName
     }
 
-    @SuppressLint("ServiceCast")
-    public fun ensureAutoEnabled(accessibilityService: String = MyAccessibilityService::class.java.name): Boolean {
-        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+//    @SuppressLint("ServiceCast")
+    fun ensureAutoEnabled(): Boolean {
+        val accessibilityService = MyAccessibilityService::class.java.name
         val enabledServices = Settings.Secure.getString(
             context.contentResolver,
             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES

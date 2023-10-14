@@ -2,6 +2,7 @@ package cn.wangyiheng.autopy
 
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
                 Python.start(AndroidPlatform(this))
             }
             val py = Python.getInstance()
-            val module = py.getModule("plot")
+            val module = py.getModule("auto")
 //            NavGraph(tokenManager)
             var x by remember { mutableStateOf("") }
             var y by remember { mutableStateOf("") }
@@ -85,11 +86,13 @@ class MainActivity : ComponentActivity() {
                 Spacer(Modifier.height(16.dp))
                 Button(onClick = {
                     try {
-                        val bytes = module.callAttr("plot", x, y).toJava(ByteArray::class.java)
-                        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                        image = bitmap.asImageBitmap()
+                        val bytes = module.callAttr("click").toJava(Boolean::class.java)
+                        Log.d("llllllll", "onCreate: $bytes")
+//                        val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+//                        image = bitmap.asImageBitmap()
                     } catch (e: PyException) {
                         // Handle the exception (e.g., show a toast)
+                        Log.d("llllllll", "onCreate: ${e.message}")
                     }
                 }) {
                     Text("Plot")
